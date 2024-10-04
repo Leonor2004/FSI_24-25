@@ -1,4 +1,3 @@
-
 # CVE-2023-7028
 
 ## Identification
