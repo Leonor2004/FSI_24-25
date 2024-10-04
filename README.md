@@ -1,9 +1,8 @@
+### FSI Grupo:
 
-Breve descrição do grupo
-
-* Turno: [L]XX
-* Grupo: YY
+* Turno: l11
+* Grupo: 06
 * Alunos:
-    - Aluno1 upZZZZZ 
-    - Aluno2 upZZZZZ
-    - Aluno3 upZZZZZ
+    - Leonor Couto up202205796
+    - Miguel Guerrinha up202205038
+    - Pedro Santos up202205900
