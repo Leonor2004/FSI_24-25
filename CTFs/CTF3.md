@@ -1,5 +1,7 @@
 # CTF3
 
+This document is a brief explanation of our resolution of the Wordpress CTF presented in class during week 3.
+
 ## Recognition
 
  Our first step was collecting as much information about the site as possible.
@@ -32,3 +34,6 @@ After identifying the wanted vulnerability, we searched for its exploits online,
 
  <img src= fotos/CTF3_4.png width="550" >
  <sub><sup>Image of the site already logged in as admin, where we found the flag.</sup></sub>
+
+## How to Prevent
+The best way to prevent this exploit is to update the MStore API plugin to a version higher than 3.9.2, because this CVE only affects versions up to, and including, 3.9.2.
