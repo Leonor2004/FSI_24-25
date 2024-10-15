@@ -9,11 +9,16 @@ This document is a brief explanation of our resolution of the Wordpress CTF pres
  We searched in the different pages of the site for any usefull information and we found the versions of the WordPress and plugins.
  We also found two possible users called "admin" and "Orval Sanford".
 
- <img src= fotos/CTF3_1.png width="550" >
- <sub><sup>Image of the versions available on the site.</sup></sub>
-
- <img src= fotos/CTF3_2.png width="550" >
- <sub><sup>Image of a chat with 2 possible users.</sup></sub>
+<div align="center">
+    <figure>
+        <img src="fotos/CTF3_1.png" width="550">
+        <figcaption style="font-size: smaller;">Image of the versions available on the site.</figcaption>
+    </figure>
+    <figure>
+        <img src= fotos/CTF3_2.png width="550" >
+        <figcaption style="font-size: smaller;">Image of a chat with 2 possible users.</figcaption>
+    </figure>
+</div>
 
 ## Searching and Choosing for Vulnerabilities
 
@@ -29,11 +34,16 @@ After identifying the wanted vulnerability, we searched for its exploits online,
  Now that we had an exploit it was time to explore this vulnerability of the server.
  We ran the script, with the username "admin" that has the user ID 1. This action was successful and we then entered a new url where we were already logged in as an administrator. Then the flag was in the text that showed up.
 
- <img src= fotos/CTF3_3.png width="550" >
- <sub><sup>Image of the terminal after successfully running the python script.</sup></sub>
-
- <img src= fotos/CTF3_4.png width="550" >
- <sub><sup>Image of the site already logged in as admin, where we found the flag.</sup></sub>
+<div align="center">
+    <figure>
+        <img src= fotos/CTF3_3.png width="550" >
+        <figcaption style="font-size: smaller;">Image of the terminal after successfully running the python script.</figcaption>
+    </figure>
+    <figure>    
+        <img src= fotos/CTF3_4.png width="550" >
+        <figcaption style="font-size: smaller;">Image of the site already logged in as admin, where we found the flag.</figcaption>
+    </figure>
+</div>
 
 ## How to Prevent
 The best way to prevent this exploit is to update the MStore API plugin to a version higher than 3.9.2, because this CVE only affects versions up to, and including, 3.9.2.
