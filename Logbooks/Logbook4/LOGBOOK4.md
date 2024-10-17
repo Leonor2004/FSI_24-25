@@ -70,11 +70,45 @@ int main(){
 
 <div align="center">
     <figure>
-        <img src="images/exploit.png">
-        <figcaption style="font-size: smaller;">Figure 1: Exploit task 6</figcaption>
+        <img src="images/exploit_task6.png">
+        <figcaption style="font-size: smaller">Figure 1: Exploit task 6</figcaption>
     </figure>
 </div>
 
 ## Task 8
 
-Documente os passos necessários para realizar o ataque e explique resumidamente o seu funcionamento
+Here we will see the difference between use the `system()` function and use the `execve()` function.
+
+The first step is compile the program and make it a root-owned *Set-UID* program. The first time we will use in the program the function `system()` to call the command `/bin/cat` to open a file that we pass through the `*argv[]`. The problem in this case is that `system()` uses the default shell to run the command we gave. Knowing this Bob can manipulate the input in the `*argv[1]`, he can insert addicional shell comands because the shell will interpret everything in the `command` string.
+
+Here is an example of that:
+
+<div align="center">
+    <figure>
+        <img src="images/exploit_task8_step1.png">
+        <figcaption style="font-size: smaller">Figure 2: Exploit task8 step 1</figcaption>
+    </figure>
+</div>
+
+Analysing this example we see that the file test.txt exists in the first `ls` command, then we execute the program `./catall` inserting an addicional bash command that will remove the file test.txt.
+
+```bash
+./catall '$(rm -rf /home/seed/FSI/Labsetup/test.txt)'
+```
+
+Using again the command `ls` we can see that we successfuly remove the test.txt file using this insert in the `*argv[1]`.
+
+In the second step we do the same thing but the program uses the `execve()` function instead of the `system()` function. This time our strategy doesn't work because the `execve()` function doesn't lunch a shell to run the command we pass to it, instead it executes the program directly, replacing the current process.
+
+Here is the example:
+
+<div align="center">
+    <figure>
+        <img src="images/exploit_task8_step2.png">
+        <figcaption style="font-size: smaller">Figure 2: Exploit task8 step 2</figcaption>
+    </figure>
+</div>
+
+Like we said the function `execve()` directly executes the program and doesn't interpret strings, but rather, it runs the specified program with a well-defined argument list.
+
+In the `execve()` function we explicity pass the path of the executable to run and the arguments to the executable.
