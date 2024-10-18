@@ -11,11 +11,11 @@ This document is a brief explanation of our resolution of the Wordpress CTF pres
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF3_1.png" width="550">
+        <img src="images/CTF3/CTF3_1.png" width="550">
         <figcaption style="font-size: smaller;">Image of the versions available on the site.</figcaption>
     </figure>
     <figure>
-        <img src= fotos/CTF3_2.png width="550" >
+        <img src= images/CTF3/CTF3_2.png width="550" >
         <figcaption style="font-size: smaller;">Image of a chat with 2 possible users.</figcaption>
     </figure>
 </div>
@@ -36,11 +36,11 @@ After identifying the wanted vulnerability, we searched for its exploits online,
 
 <div align="center">
     <figure>
-        <img src= fotos/CTF3_3.png width="550" >
+        <img src= images/CTF3/CTF3_3.png width="550" >
         <figcaption style="font-size: smaller;">Image of the terminal after successfully running the python script.</figcaption>
     </figure>
     <figure>    
-        <img src= fotos/CTF3_4.png width="550" >
+        <img src= images/CTF3/CTF3_4.png width="550" >
         <figcaption style="font-size: smaller;">Image of the site already logged in as admin, where we found the flag.</figcaption>
     </figure>
 </div>

