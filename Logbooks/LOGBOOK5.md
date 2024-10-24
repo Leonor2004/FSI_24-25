@@ -28,8 +28,7 @@ In this task we can understand how a shell code works. Using the code provided i
 
 ### Task 2
 
-
-Explique sucintamente o processo de resolução
+In this task we can understand better the way the attack will be performed. First we disabled certain security mechanisms, to ensure that the program is susceptible to a buffer overflow attack, only then we compiled the vulnerable program `stack.c`. By setting the program as a root-owned Set-UID program, we were created the conditions needed for potential privilege escalation when the vulnerability is exploited in the next task.
 
 ### Task 3
 
