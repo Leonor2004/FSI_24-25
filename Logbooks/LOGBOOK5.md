@@ -28,16 +28,15 @@ In this task we learn how a shell code works. Using the code provided in the fil
 
 ### Task 2
 
-In this task we deep dive to better understand the way the attack will be performed. First we disabled certain security mechanisms, to ensure that the program is susceptible to a buffer overflow attack, only then we compiled the vulnerable program `stack.c`. By setting the program as a root-owned Set-UID program, we created the conditions needed for potential privilege escalation when the vulnerability is exploited in the next task.
+In this task we deep dive to better understand the way the attack will be performed. First we disabled certain security mechanisms, to ensure that the program is susceptible to a buffer overflow attack, only then we compiled the vulnerable program `stack.c`. By setting the program as a root-owned Set-UID program, we created the conditions needed for potential privilege escalation when the vulnerability is exploited in the next task. In this task we also changed the L1 to be L1 = 100 + 8 * 6, being 6 the number of out group.
 
 ### Task 3
 
-In this task we used `gdb` to debug the file `stack-L1-dbg` that we created using the Makefile.
-Using this tool we can obtain the ebp and the buffer address and this way we can calculate the offset (difference between the ebp address and the buffer adress plus 4). With the offset we know were the eip address is and we can manipulate it to have the address of some function we want to run instead of the address of the point were the eip is pointing at. In this case we will pass the address of our shellcode.
-
-Knowing this we create a script in python (`exploit.py`) were we create a badfile with 517 nop's (this will overflow the buffer because the size is 100+8*6).
+In this task, we exploit the buffer overflow vulnerability in `stack-L1-dbg` to initiate a shell by manipulating the EIP to point to our shellcode.
 
 
+To begin, we used `gdb` to debug the file `stack-L1-dbg` that we created using the Makefile.
+We set a breakpoint at the start of the program and identified key memory locations, like the ebp and the buffer address (Figure 1) and this way we can calculate the offset. The offset is determined by the difference between the ebp and the buffer address, plus 4, and represents the location where we’ll place the return address to redirect the EIP. With the offset we know were the EIP address is and we can manipulate it to have the address of some function we want to run instead of the address of the point were the EIP is pointing at. In this case we will pass the address of our shellcode.
 
 <div align="center">
     <figure>
@@ -46,7 +45,11 @@ Knowing this we create a script in python (`exploit.py`) were we create a badfil
     </figure>
 </div>
 
+Knowing this we create a script in python (`exploit.py`) were we create a badfile with 517 NOPs (this will overflow the buffer because the size is 100+8*6). We also added the shellcode to the buffer toward the end of the buffer to maximize our chance of successful execution (but it can also work in another start locations). 
+
+Toward the end of the buffer, we added the shellcode to ensure enough padding and increase our chances of successful execution (as asked in Question 2). This placement also allows us some flexibility, as it may work from other starting points within the buffer. We also calculated the return address to be 0xffffca7c + start (where start is the position within the buffer), then embedded it at the offset location to overwrite the EIP with the shellcode address.
  
+Here's the Python script we used to generate badfile:
 
 ``` python
 #!/usr/bin/python3
@@ -81,6 +84,7 @@ with open('badfile', 'wb') as f:
   f.write(content)
   ```
 
+When executed, this payload successfully overflows the buffer, overwriting the EIP and redirecting execution to our shellcode, launching a root shell (Figure 2).
 
 <div align="center">
     <figure>
@@ -88,6 +92,3 @@ with open('badfile', 'wb') as f:
         <figcaption style="font-size: smaller">Figure 2: Exploit working</figcaption>
     </figure>
 </div>
-
-## Question 2
-
