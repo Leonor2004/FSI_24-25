@@ -24,16 +24,16 @@ $ sudo ln -sf /bin/zsh /bin/sh
 
 ### Task 1
 
-In this task we can understand how a shell code works. Using the code provided in the file *call_shellcode.c* we can initiate a new shell. When we compile this program with the given *Makefile* it will create two binaries, *a32.out* and *a64.out*. Runnig them we will see that a new shell is initiated. 
+In this task we learn how a shell code works. Using the code provided in the file *call_shellcode.c* we can initiate a new shell. When we compile this program with the given *Makefile* it will create two binaries, *a32.out* and *a64.out*. Runnig them we will see that a new shell is initiated. 
 
 ### Task 2
 
-In this task we can understand better the way the attack will be performed. First we disabled certain security mechanisms, to ensure that the program is susceptible to a buffer overflow attack, only then we compiled the vulnerable program `stack.c`. By setting the program as a root-owned Set-UID program, we were created the conditions needed for potential privilege escalation when the vulnerability is exploited in the next task.
+In this task we deep dive to better understand the way the attack will be performed. First we disabled certain security mechanisms, to ensure that the program is susceptible to a buffer overflow attack, only then we compiled the vulnerable program `stack.c`. By setting the program as a root-owned Set-UID program, we created the conditions needed for potential privilege escalation when the vulnerability is exploited in the next task.
 
 ### Task 3
 
-In this task we used `gdb` to debug the file `stack-L1-dbg` that we create using the Makefile.
-Using this tool we can obtain the ebp and the buffer address and this way we can calculate the offset that is the difference between the ebp address and the buffer adress plus 4. With the offset we know were the eip address is and we can manipulate it to have the address of some function we want to run instead of the address of the point were the eip is pointing for. In this case we will put in this address the address of our shellcode.
+In this task we used `gdb` to debug the file `stack-L1-dbg` that we created using the Makefile.
+Using this tool we can obtain the ebp and the buffer address and this way we can calculate the offset (difference between the ebp address and the buffer adress plus 4). With the offset we know were the eip address is and we can manipulate it to have the address of some function we want to run instead of the address of the point were the eip is pointing at. In this case we will pass the address of our shellcode.
 
 Knowing this we create a script in python (`exploit.py`) were we create a badfile with 517 nop's (this will overflow the buffer because the size is 100+8*6).
 
