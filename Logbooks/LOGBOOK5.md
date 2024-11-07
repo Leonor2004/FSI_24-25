@@ -45,7 +45,7 @@ We set a breakpoint at the start of the program and identified key memory locati
     </figure>
 </div>
 
-Knowing this we create a script in python (`exploit.py`) were we create a badfile with 517 NOPs (this will overflow the buffer because the size is 100+8*6). We also added the shellcode to the buffer toward the end of the buffer to maximize our chance of successful execution (but it can also work in another start locations). 
+Knowing this we create a script in python (`exploit.py`) where we create a badfile with 517 NOPs (this will overflow the buffer because the size is 100+8*6). We also added the shellcode to the buffer toward the end of the buffer to maximize our chance of successful execution (but it can also work in another start locations). 
 
 Toward the end of the buffer, we added the shellcode to ensure enough padding and increase our chances of successful execution (as asked in Question 2). This placement also allows us some flexibility, as it may work from other starting points within the buffer. We also calculated the return address to be 0xffffca7c + start (where start is the position within the buffer), then embedded it at the offset location to overwrite the EIP with the shellcode address.
  
