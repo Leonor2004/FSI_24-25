@@ -58,10 +58,10 @@ And after doing CONTROL+C on the second terminal, this shows on the first:
 Now that we tested with that benign message is time to do one that will hopefully crash the program.
 
 ```bash
-python3 -c 'print("%x " * 100)' | nc 10.9.0.5 9090
+cat ../attack-code/build_string.py | nc 10.9.0.5 9090
 ```
 
-????????????????????????
+After using this command, we check the other terminal and see that it didn't print the "Returned properly" message, meaning we successfuly crashed the program.
 
 
 ### Task 2
