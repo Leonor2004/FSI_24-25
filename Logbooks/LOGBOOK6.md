@@ -243,7 +243,7 @@ The original value of target is `0x11223344`.
 
 In this first sub-task we want to change the target variable value to any value.
 
-Firstly we started by changing the address in our python code to the target variable's address. We then change part of the code that changed the content of the badfile to make it print the previous caracters in the target variable changing it.
+Firstly we started by changing the address in our python code to the target variable's address. We then modify part of the code that created the content of the badfile to make it print the previous caracters in the target variable changing it.
 
 
 ```python
@@ -312,13 +312,13 @@ And that worked as seen in Figure 10.
 
 In this sub-task, we need to change the content of the target variable to a specific value 0x5000.
 
-To chane the value of the target variable to this specific number (0x5000), we need, theoricaly, to print 20480 characters before the `%n`
+To change the value of the target variable to this specific number (0x5000), we need, theoricaly, to print 20480 characters before the `%n`
 
 Since our content comes in the 64th position in the stack, this is equivalent to `63 * 8 = 504` characteres that we always need to print so we need to put print more `20480 - 504 = 19976`. This was what makes sense to do.
 
-For us this doesn't works so we have need to discover the number that we need to print before the `%n` basically by (try and error). We also discover that when we put some `%.x` before the expression to change the value of the target variable our content pass to the 62 position.
+For us this didn't work so we have need to discover the number that we need to print before the `%n` basically by trial and error. We also discover that when we put some `%.x` before the expression to change the value of the target variable our content gets passed to the 62nd position.
 
-After this we finally discover how to change the value of the variable to `0x5000` by using this script
+After this we finally discover how to change the value of the variable to `0x5000` by using this script:
 
 ```python
 #!/usr/bin/python3
@@ -356,9 +356,7 @@ with open('badfile', 'wb') as f:
   f.write(content)
 ```
 
-This script is identical to the one done in the previous subtask (3.A) except the expression `%.20252x + %x * 62 + %n` that has a little changes compared to the previous one used.
-
-and that works as seen in Figure 11
+This script is identical to the one done in the previous subtask (3.A) except the expression `%.20252x + %x * 62 + %n` that has some little changes compared to the one previously used. This works as seen in Figure 11:
 
 <div align="center">
     <figure>
