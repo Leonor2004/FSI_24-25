@@ -304,7 +304,7 @@ And that worked as seen in Figure 10.
 <div align="center">
     <figure>
         <img src="images/logbook6/logbook6_10.png">
-        <figcaption style="font-size: smaller">Figure 10: ?????????????.</figcaption>
+        <figcaption style="font-size: smaller">Figure 10: Target variable changed.</figcaption>
     </figure>
 </div>
 
