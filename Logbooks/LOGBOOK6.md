@@ -364,3 +364,15 @@ This script is identical to the one done in the previous subtask (3.A) except th
         <figcaption style="font-size: smaller">Figure 11: Target variable changed to 0x5000.</figcaption>
     </figure>
 </div>
+
+## Question 2
+
+**CWE-134** describes a vulnerability that occurs when a program allows user input to be used as a format string in function like `printf`, `sprintf`, `fprint` without proper validation. 
+
+It is not necessary for the format string to always be allocated on the stack for the vulnerability to exist. The key factor is that the program interprets user-controlled input as a format string containing format specifiers (`%x`, `%s`, `%n`, etc.) without sanitization. When the format string is on the heap, the exploitation may be more difficult but not impossible.
+
+The attacks that would not work if the format string was placed on the heap are:
+
+- **Task 2.A**: Since it relies on exploring the stack to find values (such as user input), if the format string is on the heap, stack data would not align as expected, and we wouldn't be able to navigate through the stack using `%x` to locate their input.
+
+- **Task 3.B**: This task would not be successed because the goal is to overwrite a stack variable with a spcefic value but the offsets calculated for `%n` might not align correctly if the format string is allocated on the heap.
