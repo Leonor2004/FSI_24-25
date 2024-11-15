@@ -35,7 +35,7 @@ Here we can observe that the program has some important protection mechanisms de
  - **Stack Canary**: Here it says that the program has a canary but in the statement of the CTF it says that "the challenge binary does not contain a canary", making it easy to attack.
  - **PIE**: Without the PIE, the program loads at fixed address every time making it predictable and easy to exploit.
 
-The program has some other important vulnerabilities deactivated but this are the most relevant ones for our exploit to be successful.
+The program has some other important protection mechanisms deactivated but this are the most relevant ones for our exploit to be successful.
 
 To achieve the exploit we start by finding the memory address where the function `readtxt` is allocated. To do that we used the `gdb` tool and find out that was address `0x80497a5`.
 
