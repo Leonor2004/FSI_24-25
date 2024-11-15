@@ -8,9 +8,9 @@ This report explores the exploitation of Cross-Site Scripting (XSS) vulnerabilit
 
 ### Task 1
 
-In this tak we are want to embe JavaScript directly within the Elgg profile fields to trigger an alert window, demonstrating a basic XSS vulnerability. 
+In this task we want to embed JavaScript directly within the Elgg profile fields to trigger an alert window, demonstrating a basic XSS vulnerability. 
 
-For this tasked we logged in the user Alice.
+For this tasked we logged in as the user Alice.
 
 <div align="center">
     <figure>
@@ -19,7 +19,7 @@ For this tasked we logged in the user Alice.
     </figure>
 </div>
 
-We edited the user profile and added out JavaScript code to the profile to start the atack.
+We edited the user profile and added out JavaScript code to the profile to start the attack.
 
 ```js
 <script>alert('XSS');</script>
@@ -47,8 +47,6 @@ This attack verifies that Elgg’s input fields are vulnerable to script injecti
 
 The objective of this task is to embed a JavaScript program in your Elgg profile, such that when another user views your profile, the user’s cookies will be displayed in the alert window. This can be done by adding some additional code to the JavaScript program in the previous task:
 
-In this task we want to be able to display the user's cookies in the alert window. To do that we changed the JavaScript code no Alice's profile.
-
 ```js
 <script>alert(document.cookie);</script>
 ```
@@ -73,7 +71,7 @@ In this task only the user can see its own cookies, not the attacker.
 
 ### Task 3 
 
-Now we want, as the attacker, to be able to see the user (that entered Alice's profile) cookies. So we need to find a way to send the cookies of the user to the attacker.
+Now we want, as the attacker, to be able to see the visiting user's cookies. So we need to find a way to send the cookies of the user to the attacker.
 To do this we will again change our JavaScript code to send the cookies to the attacker.
 
 This code creates an 'img' tag with the src attribute set to a URL that includes the cookies (document.cookie) as a parameter. The browser will attempt to load this img from the attacker’s machine (10.9.0.1), and in doing so, it will send the cookies in an HTTP GET request to http://10.9.0.1:5555.
@@ -109,10 +107,9 @@ Now when another user enters Alice's profile, instead of receiving a message wit
 
 ### Task 4 
 
-In this task we want to make something more simmilar to the attack that Samy did to MySpace in 2005.
-We will write an XSS worm that adds Samy as a friend to any other user that visits Samy's profile, but this worm does not self-propagate.
+In this task we want to make something more simmilar to the famous attack that Samy did to MySpace in 2005. We will write an XSS worm that adds Samy as a friend to any other user that visits Samy's profile, but this worm does not self-propagate.
 
-To start, we used another account and with the help of "HTTP Header Live" Tool we want to find more informations on the request to add a friend. 
+To start, we used another account and with the help of "HTTP Header Live" Tool we want to find more information on the request to add a friend. 
 
 <div align="center">
     <figure>
@@ -125,8 +122,8 @@ This is the full first line:
 http://www.seed-server.com/action/friends/add?friend=59&__elgg_ts=1731600303&__elgg_token=eFNYGSxhJNN5Bit9ga_7_w&__elgg_ts=1731600303&__elgg_token=eFNYGSxhJNN5Bit9ga_7_w
 
 
-In the first line, anong other things, its writen "friend=59", so now we know that Samy's ID is 59.
-Another thing we had to do was use the first line that we had obtain in the "HTTP Header Live" Tool to undestand the order of elements int the UML and then form the acctual UML.
+In the first line, among other things, its writen "friend=59", so now we know that Samy's ID is 59.
+Another thing we had to do was use the first line that we had obtain in the "HTTP Header Live" Tool to undestand the order of elements in the UML and then form the actual UML.
 
 ```js
 <script type="text/javascript">
@@ -146,7 +143,7 @@ Another thing we had to do was use the first line that we had obtain in the "HTT
   }
 </script>
 ```
-After adding this JavaScript code to Samy's profile, now we tested by opening Alice's profile and, without adding manually Samy as friend, we opened Samy's profile and then went to Alice's friends and we could then check that Samy was added to Alice's friend list without Alice doing anything.
+After adding this JavaScript code to Samy's profile, now we tested by opening Alice's profile and, without adding manually Samy as friend, we opened Samy's profile and then went to Alice's friends and we could then check that Samy was added to Alice's friend list without Alice doing so manually.
 
 <div align="center">
     <figure>
@@ -179,7 +176,7 @@ Even with only "Editor mode" enabled for the "About Me" field, an XSS attack can
 
 There are several types of XSS attacks (Reflected, Stored, or DOM). Which type(s) does this attack fall under and why?
 
-The attack performed in this lab  is best classified as a Stored XSS attack. In this scenario, the malicious JavaScript is injected and stored in the "About Me" field of Samy's profile. Every time another user, like Bob, visits Samy's, the malicious code is executed  from the  making it a classic example of XSS. The injected script is persistently stored in the Elgg database, and it runs automatically when the page is loaded, which is characteristic of Stored XSS. 
+The attack performed in this lab  is best classified as a Stored XSS attack. In this scenario, the malicious JavaScript is injected and stored in the "About Me" field of Samy's profile. Every time another user, like Bob, visits Samy's profile, the malicious code is executed making it a classic example of XSS. The injected script is persistently stored in the Elgg database, and it runs automatically when the page is loaded, which is characteristic of Stored XSS. 
 
 Unlike Reflected XSS, which involves the malicious code being reflected off the server in response to a user request , this attack does not rely on tricking the victim into clicking a malicious link. 
 Additionally, this attack is not an example of DOM-based XSS, as it does not depend on client-side manipulation of the page but rather on server-side storage. 
