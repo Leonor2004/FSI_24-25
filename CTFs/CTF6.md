@@ -92,7 +92,7 @@ payload = b"./flagxx" + fmtstr_payload(3, {int_fun: readtxt_address}, numbwritte
 ```
 
 This was the payload we used in the exploit and this is how it works:
-- Observing the program source code we  that the `readtxt()` function reads the 6 first bytes of the buffer so we need to put in this bytes the file we want to read `flag.txt`. In this case we put `./flagxx` so we guarantee that we pass the right path of the file, and we add the two `x` to complete the 8 bytes to guarantee the proper alignment in the stack.
+- Observing the program source code we found out that the `readtxt()` function reads the 6 first bytes of the buffer so we need to put in this bytes the file we want to read `flag.txt`. In this case we put `./flagxx` so we guarantee that we pass the right path of the file, and we add the two `x` to complete the 8 bytes to guarantee the proper alignment in the stack.
 - The function `fmtstr_payload()` works with the values in the stack. So the first argumment is the offset where our data appear in the stack that in this case was `1 + 2` because the initial offset was `1` and because we put the `./flagxx` before the offset increase 2 bytes. The second argumment is to write in the `fun` pointer the address of the `readtxt()` function. The last argumment is the number of characteres that we write in the stack.
 
 This is the source code of our exploit:
