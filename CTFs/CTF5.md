@@ -94,4 +94,11 @@ buf = r.recv().decode()
 print(buf)
 ```
 
-With this script we successfully retrieved the flag from the flag.txt file.
+With this script we successfully retrieved the flag from the `flag.txt` file.
+
+<div align="center">
+    <figure>
+        <img src="images/CTF5/flag.png" width="550">
+        <figcaption style="font-size: smaller;">Figure 3: Flag founded.</figcaption>
+    </figure>
+</div>

