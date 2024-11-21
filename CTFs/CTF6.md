@@ -4,7 +4,7 @@ This document is a brief explanation of our resolution of the Format Strigs CTF 
 
 ## Recognition
 
-We start exploring the program source code and answering this questions:
+We start by exploring the program source code so we can answer these questions:
 
 
 - **Question1**: Is there any file that is opened and read by the program?
@@ -34,13 +34,13 @@ Here we can observe that the program has some important protection mechanisms de
 
  - **RELRO**: Without this, we can perform a GOT overwrite attack, redirecting the execution flow of the program.
  - **Stack Canary**: Here it says that the program has a canary but in the statement of the CTF it says that "the challenge binary does not contain a canary", making it easy to attack.
- - **PIE**: Without the PIE, the program loads at a fixed address every time, making it easy to exploit.
+ - **PIE**: Without the PIE, the program loads at fixed address every time making it predictable and easy to exploit.
 
-The program has some other important vulnerabilities deactivated but these are the most important to our exploit.
+The program has some other important protection mechanisms deactivated but these are the most important for our exploit to work.
 
-To do the exploit we need to find some important things in the program like addresses, buffer sizes, stack format...
+To perform the exploit we need to find some important things in the program like addresses, buffer sizes, stack format...
 
-When we initiate the program we have a mensage that tells us what is the address of the `fun` pointer and we can see that it **changes everytime** we run the program (an important detail).
+When we initiate the program we have a message that tells us what the address of the `fun` pointer is, and we can also see that it **changes everytime** we run the program (an important detail).
 
 <div align="center">
     <figure>
@@ -58,9 +58,9 @@ We then searched for the memory address where the function `readtxt` is allocate
     </figure>
 </div>
 
-Knowing this addresses was a very important part of the exploit, but now we needed to understand how the stack worked and how we could change the value of the `fun` pointer to point to the function `readtxt`.
+Knowing this addresses is a very important part of the exploit, but now we need to understand how the stack works and how we can change the value of the `fun` pointer to point to the function `readtxt`.
 
-The program has a vulnerability that prints directly what is writted in the buffer so we can pass some inputs to explore the stack and take some important information.
+The program has a vulnerability that prints directly what is written in the buffer so we can pass some inputs to explore the stack and take some important information.
 
 By using this payload we are able to know what is the offset where our input appears in the stack:
 
@@ -77,7 +77,7 @@ payload = "AA" + "%x" * 4
 
 By observing the output of this payload we were able to see that the offset is actualy 1.
 
-After all this searching and analysing we are able to start building the exploit
+After all this searching and analysing we are able to start building the exploit.
 
 ## Exploit
 
@@ -92,7 +92,7 @@ payload = b"./flagxx" + fmtstr_payload(3, {int_fun: readtxt_address}, numbwritte
 ```
 
 This was the payload we used in the exploit and this is how it works:
-- Observing the program source code we found out that the `readtxt()` function reads the 6 first bytes of the buffer so we need to put in this bytes the file we want to read `flag.txt`. In this case we put `./flagxx` so we guarantee that we pass the right path of the file, and we add the two `x` to complete the 8 bytes to guarantee the proper alignment in the stack.
+- Observing the program source code we found out that the `readtxt()` function reads the 6 first bytes of the buffer so we need to put in this bytes the file we want to read: `flag.txt`. In this case we put `./flagxx` so we guarantee that we pass the right path of the file, and we add the two `x` to complete the 8 bytes to guarantee the proper alignment in the stack.
 - The function `fmtstr_payload()` works with the values in the stack. So the first argumment is the offset where our data appear in the stack that in this case was `1 + 2` because the initial offset was `1` and because we put the `./flagxx` before the offset increase 2 bytes. The second argumment is to write in the `fun` pointer the address of the `readtxt()` function. The last argumment is the number of characteres that we write in the stack.
 
 This is the source code of our exploit:
@@ -137,6 +137,6 @@ And using that python script we were able to find te flag from the file `flag.tx
 <div align="center">
     <figure>
         <img src="images/CTF6/flag.png" width="550">
-        <figcaption style="font-size: smaller;">Figure ?: Flag founded.</figcaption>
+        <figcaption style="font-size: smaller;">Figure 5: Flag found.</figcaption>
     </figure>
 </div>
