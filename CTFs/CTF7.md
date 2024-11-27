@@ -74,7 +74,7 @@ This questions were in the CTF description and we decided to include them here b
 
 **Answer**: The `copyparty` service's version `1.8.6` as some vulnerabilities and one of them (CVE-2023-38501) is perfectly suited for the type of attack we want to do (XSS).
 
-**Question**: Which type of vulnerability is XSS (Reflected, Stored ou DOM) that allowed you to access the flag?
+**Question3**: Which type of vulnerability is XSS (Reflected, Stored ou DOM) that allowed you to access the flag?
 
 **Answer**: The type of XSS vulnerability that allowed us to access the flag in this scenario is a **Reflected XSS** because:
 
