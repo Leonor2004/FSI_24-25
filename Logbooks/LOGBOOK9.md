@@ -8,7 +8,11 @@ This logbook explores the secret-key encryption concepts.
 
 In this task we are challenged to decrypt a file that uses monoalphabetic substitution cipher.
 
-To successfully decrypt the file we used the frequency analysis algorithm and step by step we discovered all the corresponding letters:
+To successfully decrypt the file we used the frequency analysis algorithm and step by step we discovered all the corresponding letters.
+
+Frequency analysis involves identifying letters or words that frequently appear in the encrypted text. By analyzing the common letters and words in the language of the encrypted message, we can make guesses about which letters correspond to those in the ciphertext.
+
+By doing this we are able to guess all the letters and successfully decrypt the text: 
 
 ```bash
 tr 'ytnhlmusprieqxvazdbgfckojw' 'THERWINKDGLPSOACUYFBVMXJQZ' < ciphertext.txt > out.txt
@@ -89,6 +93,17 @@ openssl enc -aes-128-ctr -d -in cipher_ctr.bin -out decrypted_ctr.txt -K 0011223
 # Task 5
 
 In this task we change the byte 50*6 = 300 and watch the results when the decryption of the file is done.
+
+To corrupt the file we need to first encrypt the file and after that we open the encrypted file using the **Bless Hex Editor** and change the byte in the 300 position like its demonstrate in the image:
+
+<div align="center">
+    <figure>
+        <img src="images/logbook9/logbook9_4.png">
+        <figcaption style="font-size: smaller">Figure 1: Block Affected Using ECB Mode</figcaption>
+    </figure>
+</div>
+
+In this task we cnhaged the byte always to `FF` and then we decrypt the file and watch what's the result of the corruption.
 
 ### aes-128-ecb mode (Electronic Codebook Mode)
 
