@@ -151,7 +151,7 @@ In detail this command:
 - -m 400: Specifies the hash type for WordPress (PHPass).
 - -a 0: Indicates a dictionary attack.
 - $P$BuRuB0Mi3926H8h.hcA3pSrUPyq0o10: The hash we needed to crack.
-- rockyou.txt: The wordlist used for the attack.
+- rockyou.txt: The wordlist used to dehash.
 
 <div align="center">
     <figure>
