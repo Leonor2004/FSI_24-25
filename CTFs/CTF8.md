@@ -4,7 +4,7 @@ This document is a brief explanation of our resolution of the SQL Injection CTF 
 
 ## Recognition
 
-First we searched in the site for possiblem usernames and a possible username for the admin account. We found 2 possible users: admin and concerned-hacker. 
+First we searched in the site for possible usernames and a possible username for the admin account. We found 2 possible users: admin and concerned-hacker. 
 
 <div align="center">
     <figure>
@@ -170,7 +170,7 @@ This questions were in the CTF description and we decided to include them here b
 
 **Question1**: You should start by finding all the information that you can from the site. In particular, and just like the previous ctf about Wordpress, try to find the intalled software versions.
 
-**Answer**: We searched for the softwere versions, as showed in the Recognition section of this report. This recognition is very important because it helps us find possible vulnerabilities in the next fase.
+**Answer**: We searched for the software versions, as showed in the Recognition section of this report. This recognition is very important because it helps us find possible vulnerabilities in the next fase.
 
 
 **Question2**: You already know that we want to explore an SQL injection vulnerability. Maybe there is a know vulnerability, reported in public data bases and/or tools that allow you to automate the discovery and abuse of SQL injection vulnerabilities?
