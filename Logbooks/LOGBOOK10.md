@@ -47,10 +47,12 @@ http://www.seedlab-hashlen.com/?myname=PedroSantos&uid=1001&lstcmd=1&mac=fb16a39
 
 ## Task 2
 
-In this task we are supposed to create a padding for this message: `1001:myname=PedroSantos&uid=123456&lstcmd=1`. Firstly we need to know the length of the padding, and as the string is 43 bytes long, the padding should be 64 - 43 = 21 bytes. Knowing that our string is 43 bytes long we need to add 43 * 8 = 344 (in hexadecimal) to the end of our padding. This is how it turned out:
+In this task we are supposed to create a padding for this message: `1001:myname=PedroSantos&uid=123456&lstcmd=1`. Firstly we need to know the length of the padding, and as the string is 43 bytes long, the padding should be 64 - 43 = 21 bytes. Knowing that our string is 43 bytes long we need to add 43 * 8 = 344 (in hexadecimal: 0x158) to the end of our padding. This is how it turned out:
 
 ```bash
+# Message:
 "1001:myname=PedroSantos&uid=123456&lstcmd=1"
+# Padding:
 "\x80"
 "\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
 "\x00\x00"
@@ -58,3 +60,18 @@ In this task we are supposed to create a padding for this message: `1001:myname=
 ```
 
 ## Task 3
+
+In this task we must generate a valid MAC without knowing the MAC key.
+
+d8991b22cbfb969d440348cc9b39bc8e3a9a66dd1673f5f2e591a20f4cc04b14
+
+```
+http://www.seedlab-hashlen.com/?myname=PedroSantos&uid=1001&lstcmd=1%80%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%00%01%58&download=secret.txt&mac=d8991b22cbfb969d440348cc9b39bc8e3a9a66dd1673f5f2e591a20f4cc04b14
+```
+
+<div align="center">
+    <figure>
+        <img src="images/logbook10/success.png">
+        <figcaption style="font-size: smaller">Figure : Success</figcaption>
+    </figure>
+</div>

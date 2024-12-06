@@ -163,7 +163,7 @@ In detail this command:
 The admin password is "heartbroken" and it also corresponds to the flag of this ctf.
 
 
-## Tarefas
+## Tasks
 
 This questions were in the CTF description and we decided to include them here because these helped our thought process and helped us complete this CTF.
 
