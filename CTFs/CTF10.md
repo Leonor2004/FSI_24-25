@@ -36,5 +36,17 @@ We begin by selecting a group of four letters that could represent the word `par
 
 Next, we attempt to identify the word `que` as it contains another frequently occurring letter in Portuguese, `E`. This step proved more challenging because the word is shorter, and several groups appear frequently, making it harder to pinpoint the match. However, we can eliminate any groups where the first character corresponds to one that appears less often in the cipher, since the letter `Q` is not as frequent in Portuguese. We can also rule out groups where the third character is one that appears infrequently, as `E` is a letter that occurs quite often in the language. This helps narrow down the possibilities. By trying some possibilities we discover that with the characters, `; ~ -`, some incompleted words starts to appear.
 
-After that, we began attempting to construct meaningful words and identified which letter each character represented.
+After that, we began attempting to construct meaningful words and identified which letter each character represents.
 
+Word by word we discover the letters that corresponds to each caracter and finally found the flag.
+
+<div align="center">
+    <figure>
+        <img src="images/CTF10/ctf10_4.png">
+        <figcaption style="font-size: smaller">Figure 4: Substitution method used</figcaption>
+    </figure>
+    <figure>
+        <img src="images/CTF10/ctf10_5.png">
+        <figcaption style="font-size: smaller">Figure 5: Deciphered text and respective flag</figcaption>
+    </figure>
+</div>
