@@ -13,6 +13,7 @@ We copied the default OpenSSL configuration file and modified it for our setup:
 ```bash
 cp /usr/lib/ssl/openssl.cnf ./openssl.cnf
 ```
+
 In the configuration file, we ensured the following paths were set:
 
 ```bash
@@ -23,6 +24,7 @@ database = $dir/index.txt  # Database index file
 new_certs_dir = $dir/newcerts  # Directory for new certificates
 serial = $dir/serial        # Serial number file
 ```
+
 And we also made sure to write the following line inside that file.
 
 ```bash
