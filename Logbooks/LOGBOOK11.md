@@ -2,18 +2,23 @@
 
 ## Introduction
 
-In this logbook ...
+In this logbook, we document the process of setting up SSL/TLS certificates.
+
+We used docker for the setup, and the first step was changing the `/etc/hosts` file and adding the following lines:
+```
+10.9.0.80 www.bank32.com
+10.9.0.80 www.Couto2024.com
+```
 
 ## Question 1
 
 ### Task 1
 
-We copied the default OpenSSL configuration file and modified it for our setup:
+We started by copying the default OpenSSL configuration file to our working directory.
 
 ```bash
 cp /usr/lib/ssl/openssl.cnf ./openssl.cnf
 ```
-
 In the configuration file, we ensured the following paths were set:
 
 ```bash
@@ -24,7 +29,6 @@ database = $dir/index.txt  # Database index file
 new_certs_dir = $dir/newcerts  # Directory for new certificates
 serial = $dir/serial        # Serial number file
 ```
-
 And we also made sure to write the following line inside that file.
 
 ```bash
@@ -45,22 +49,22 @@ openssl req -x509 -newkey rsa:4096 -sha256 -days 3650 \
     </figure>
 </div>
 
-Files Generated:
+And this command generated this files:
 - ca.key: The private key of the CA.
 - ca.crt: The self-signed certificate.
 
-We used this command inspect the CA certificate.
+Then we used this command inspect the CA certificate.
 
 ```bash
 openssl x509 -in ca.crt -text -noout
 ```
 In this certificate we looked especially at two things.
-We looked for the CA Certificate Indicator and found it: CA:TRUE
+We looked for the CA Certificate Indicator that would confirm it is a CA certificate and found it: `CA:TRUE`.
 
 <div align="center">
     <figure>
         <img src="images/logbook11/image-1.png">
-        <figcaption style="font-size: smaller">Figure 2: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 2: CA Certificate with CA:TRUE </figcaption>
     </figure>
 </div>
 
@@ -69,11 +73,11 @@ And then we observed that the Issuer and Subject fields were identical.
 <div align="center">
     <figure>
         <img src="images/logbook11/image-2.png">
-        <figcaption style="font-size: smaller">Figure 3: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 3: Matching Issuer and Subject fields. </figcaption>
     </figure>
 </div>
 
-Then we wanted to inspect the RSA private key.
+To end this task, we inspected the RSA private key.
 
 ```bash
 openssl rsa -in ca.key -text -noout
@@ -85,7 +89,7 @@ And we found the following RSA components:
 <div align="center">
     <figure>
         <img src="images/logbook11/image-3.png">
-        <figcaption style="font-size: smaller">Figure 4: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 4: Modulus (n) </figcaption>
     </figure>
 </div>
 
@@ -95,7 +99,7 @@ And we found the following RSA components:
 <div align="center">
     <figure>
         <img src="images/logbook11/image-4.png">
-        <figcaption style="font-size: smaller">Figure 5: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 5: Public (e) and Private (d) exponents </figcaption>
     </figure>
 </div>
 
@@ -104,13 +108,13 @@ And we found the following RSA components:
 <div align="center">
     <figure>
         <img src="images/logbook11/image-5.png">
-        <figcaption style="font-size: smaller">Figure 6: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 6: Prime factors (p, q) </figcaption>
     </figure>
 </div>
 
 ### Task 2
 
-In this task we started by generating a  Certificate Signing Request (CSR) and a private key for `www.Couto2024.com`.
+In this task we started by generating a Certificate Signing Request (CSR) and a private key for `www.Couto2024.com`.
 
 ```bash
 openssl req -newkey rsa:2048 -sha256 \
@@ -123,7 +127,7 @@ And with that command 2 files were generated:
 - server.csr: The certificate signing request.
 
 We then ran a command to view the content of the CSR.
-This allowed us to see that the subject field matched the imput form before ("www.Couto2024.com").
+This allowed us to see that the subject field matched the imput from before ("www.Couto2024.com").
 
 ```bash
 openssl req -in server.csr -text -noout
@@ -141,7 +145,7 @@ And then we opened the file with the private key.
 ```bash
 openssl rsa -in server.key -text -noout
 ```
-Here we confirmed the presence of key components, like we did before (Modulus (n), Public exponent (e) and Private exponent (d) and Prime factors (p and q)).
+Here we confirmed the presence of the same key components as before, but with diferent content (Modulus (n), Public exponent (e) and Private exponent (d) and Prime factors (p and q)).
 
 <div align="center">
     <figure>
@@ -154,7 +158,8 @@ Here we confirmed the presence of key components, like we did before (Modulus (n
     </figure>
 </div>
 
-Now we want to add Subject Alternative Names (SANs), and to do that we had to regenerate the CRS but now with SANs.
+Lastly, in this task, we want to add Subject Alternative Names (SANs), and to do that we had to regenerate the CRS but now with SANs.
+
 ```bash
 openssl req -newkey rsa:2048 -sha256 \
 -keyout server.key -out server.csr \
@@ -162,23 +167,30 @@ openssl req -newkey rsa:2048 -sha256 \
 -addext "subjectAltName = DNS:www.Couto2024.com, DNS:www.Couto2024A.com, DNS:www.Couto2024B.com" \
 -passout pass:dees
 ```
+
 To confirm SANs were added, we ran:
 
 ```bash
 openssl req -in server.csr -text -noout
 ```
-And with that we were able to see the `X509v3 Subject Alternative Name` field with all the sepecific DNS names.
+And with that we were able to see the `X509v3 Subject Alternative Name` field with all the sepecific domains.
 
 <div align="center">
     <figure>
         <img src="images/logbook11/image-9.png">
-        <figcaption style="font-size: smaller">Figure 10: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 10: CSR details showing SANs </figcaption>
     </figure>
 </div>
 
 ### Task 3
 
-We used the following command to sign the `server.csr` file with our CA’s private key and certificate:
+We started by changing the file `openssl.cnf` to make sure that it contained the following line:
+
+```
+copy_extensions = copy
+```
+
+Then we used the following command to sign the `server.csr` file with our CA’s private key and certificate:
 
 ```bash
 openssl ca -config openssl.cnf -policy policy_anything \
@@ -196,6 +208,8 @@ Command explanation:
 - cert ca.crt: The CA's public certificate.
 - keyfile ca.key: The CA's private key.
 
+After running the command, a signed certificate file (server.crt) was successfully generated.
+
 <div align="center">
     <figure>
         <img src="images/logbook11/image-10.png">
@@ -203,29 +217,38 @@ Command explanation:
     </figure>
 </div>
 
-And now a signed certificate file (server.crt) was generated.
-T0 verify the signed certificate we opened the `server.crt`.
+
+To ensure the signed certificate is valid and contains the required fields, we inspected its contents using the following command:
+
 ```bash
 openssl x509 -in server.crt -text -noout
 ```
-We ensured that the Subject Alternative Names (SANs) field was included.
 
+And we ensured that the `X509v3 Subject Alternative Name` matched the specified SANs.
+
+```
+X509v3 Subject Alternative Name:
+    DNS:www.Couto2024.com, DNS:www.Couto2024A.com, DNS:www.Couto2024B.com
+```
 <div align="center">
     <figure>
         <img src="images/logbook11/image-12.png">
-        <figcaption style="font-size: smaller">Figure 12: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 12: SANs in the signed certificate </figcaption>
     </figure>
 </div>
 
-And we made sure that field would match our CA.
+To finish this task, we confirmed that the Issuer field matched our CA, confirming that our CA successfully signed the certificate.
 
 <div align="center">
     <figure>
         <img src="images/logbook11/image-11.png">
-        <figcaption style="font-size: smaller">Figure 13: ?? </figcaption>
+        <figcaption style="font-size: smaller">Figure 13: Issuer details confirming CA signature </figcaption>
     </figure>
 </div>
 
+With this task successfully finished we now have the following files:
+- server.key: Server's private key.
+- server.crt: Signed server certificate.
 
 ### Task 4
 
