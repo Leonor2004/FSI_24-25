@@ -5,6 +5,7 @@
 In this logbook, we document the process of setting up SSL/TLS certificates.
 
 We used docker for the setup, and the first step was changing the `/etc/hosts` file and adding the following lines:
+
 ```
 10.9.0.80 www.bank32.com
 10.9.0.80 www.Couto2024.com
@@ -208,7 +209,7 @@ Command explanation:
 - cert ca.crt: The CA's public certificate.
 - keyfile ca.key: The CA's private key.
 
-After running the command, a signed certificate file (server.crt) was successfully generated.
+After running the command, a signed certificate file (`server.crt`) was successfully generated.
 
 <div align="center">
     <figure>
@@ -252,19 +253,83 @@ With this task successfully finished we now have the following files:
 
 ### Task 4
 
-TODO
+In this task we need to establish an HTTPS website using Apache, and we will understand better the use of public-key certificates for web security.
+
+To do this, we started by going to the /etc/apache2/ directory within the container and utilized the existing setup of the HTTPS site, `www.bank32.com`, as an example to make our own. We created a new file called `Couto2024_apache_ssl.conf` containing the code needed to configure our website.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-14.png">
+        <figcaption style="font-size: smaller">Figure 14: Couto2024_apache_ssl.conf file </figcaption>
+    </figure>
+</div>
+
+When we tried to open it showed that the website was insecure, so in the `about:preferences#privacy` we inclued our `ca.crt`.
+And now accessing the website no longer triggers any security warnings.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-13.png">
+        <figcaption style="font-size: smaller">Figure 15: Site is now secure </figcaption>
+    </figure>
+</div>
 
 ### Task 5
 
-TODO
+In this task we want to simulate a Man-In-The-Middle attack and see how PKI can counter such threats.
+To do this we created a fake website using the configuration of `www.bank32.com` and changed the ServerName to `www.example.com`.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-15.png">
+        <figcaption style="font-size: smaller">Figure 16: Couto2024_apache_ssl.conf file changed </figcaption>
+    </figure>
+</div>
+
+Then we to simulate a DNS attack we added `10.9.0.80 www.example.com` to the `/etc/hosts file`, redirecting users from the intended site to our site.
+
+We the reloaded and restarted the Apache, and now when attempting to access `www.example.com` it triggers a browser warning because the CA, that has signed the certificate signing request for our forged website, is missing.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-16.png">
+        <figcaption style="font-size: smaller">Figure 17: Warning </figcaption>
+    </figure>
+</div>
+
 
 ### Task 6
 
-TODO
+In this task we will again simulate a Man-In-The-Middle attack, bu now with access to a compromised CA private key.
+
+To do this we repeated some commands from the previous tasks, generating a key and certificate for the website `www.example.com`.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-17.png">
+        <figcaption style="font-size: smaller">Figure 18: CA for www.example.com </figcaption>
+    </figure>
+</div>
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-18.png">
+        <figcaption style="font-size: smaller">Figure 18: CA for www.example.com </figcaption>
+    </figure>
+</div>
+
+Once that was finished we simply replaced the files /certs/bank32.key and /certs/bank32.crt with our own key and certificate.
+And now we can enter the `www.example.com` and the browser does not have the warnings from before, because we now have a certificate signed by the compromised CA.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook11/image-19.png">
+        <figcaption style="font-size: smaller">Figure 19: Working www.example.com </figcaption>
+    </figure>
+</div>
 
 
 ## Question 2
 
-TODO
+**Question** : Despite assuming that these Certification Authorities (CAs) are resistant to attacks, realistically, we must always consider the possibility of them being compromised. Indicate a mechanism that allows reacting to this occurrence and preventing attacks, and describe measures an adversary could take to avoid this mechanism from stopping them from exploiting a compromised CA.
 
-Apesar de assumirmos que estas autoridades de certificação são resistentes a ataques, realisticamente, devemos considerar sempre a possibilidade de serem comprometidas. Indique um mecanismo que permita reagir a essa ocorrência e impedir ataques, e que medidas um adversário pode tomar para evitar que esse mecanismo o impeça de tirar partido de uma autoridade de certificação comprometida.
+**Answer** : One mechanism to counter a compromised Certification Authority is Certificate Revocation Lists (CRLs) or the Online Certificate Status Protocol (OCSP), which ensure revoked certificates cannot be trusted. An adversary could attempt to prevent this defense by blocking access to CRL or OCSP servers and that would stop browsers from verifying the revocation status of a certificate.
