@@ -8,7 +8,7 @@ The objective was to exploit a poorly designed key generation method to decrypt 
 
 ## Recognition
 
-We where given this hexadecimal for our CTF:
+We were given this hexadecimal for our CTF:
 
 ```
 e98b6f8376147fc47f66ac5d4b235896
@@ -103,7 +103,7 @@ The flag was: flag{lixawtzwchuuylq}.
 
 ## Tasks
 
-### Task1 1
+### Task 1
 
 **Question1:** How can I use this ciphersuite to encrypt and decrypt data?
 
