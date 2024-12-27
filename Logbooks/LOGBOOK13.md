@@ -61,7 +61,7 @@ The second way can be sometimes more convinient by just runing Scapy code intera
 
 On this task we sniffed the packets on our network interface, with the help of the following python script.
 
-```py
+```python
 #!/usr/bin/env python3
 from scapy.all import * 
 
@@ -172,7 +172,7 @@ In this task we will set some filters and redo the sniffing to see the resilts.
 
 This filter is the same we used in the last task, so the results will be the same.
 
-```py
+```python
 pkt = sniff(iface='br-449382b66784', filter='icmp', prn=print_pkt)
 ```
 
@@ -182,7 +182,7 @@ To so this, we need to change the `filter` to be `"tcp and src host 10.9.0.5 and
 
 `10.9.0.5` is the IP of host A, so we whave now filtered all the TCP packets that come from host A and with a destination port number 23 (`and dst port 23`)`.
 
-```py
+```python
 pkt = sniff(iface='br-449382b66784', filter="tcp and src host 10.9.0.5 and dst port 23", prn=print_pkt)
 ```
 
@@ -192,25 +192,195 @@ Just like in the last time we ran a command in host A, but a diferent one to ens
 echo "TESTE" > /dev/tcp/10.9.0.6/23
 ```
 
-TODO
+And in the sniffer terminal we obtained:
 
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_9.png">
+        <figcaption style="font-size: smaller">Figure 9: Sniffing using the filter </figcaption>
+    </figure>
+</div>  
 
+- **Capture packets comes from or to go to a particular subnet**
 
+To do this first we need to choose a subnet, that is not the one we are already using. 
+So we used `ifconfig` command to display a list of all the interfaces `enp0s3`.
 
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_9.png">
+        <figcaption style="font-size: smaller">Figure 10: The chosen interface </figcaption>
+    </figure>
+</div>  
 
+By applying the 255.255.255.0 netmask to the interface - 10.0.2.15 - we achieved 10.0.2.0/24:
 
+To the interface `10.0.2.15` we apllied the `255.255.255.0` netmask and obtained the subnet `10.0.2.0/24`.
 
+So we then applied this filter in our siffing code.
 
+```python
+pkt = sniff(iface='br-449382b66784', filter="net 10.0.2.0/24", prn=print_pkt)
+```
 
+So with `sniffer.py` runnign, in host A terminal we did:
 
+```bash
+ping 10.0.2.15 -c 5
+```
 
+And in the sniffer terminal we obtained:
 
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_11.png">
+        <figcaption style="font-size: smaller">Figure 11: Sniffing using the filter </figcaption>
+    </figure>
+</div>  
 
+### Task 1.2
 
+In this task we want to create and send ICMP echo request packets with a spoofed source IP address and observe the network behavior using Wireshark.
 
+We used the following script:
 
+```python
+#!/usr/bin/env python3
+from scapy.all import *
 
+ip = IP()
+ip.src = "10.9.0.5" # source IP - host A
+ip.dst = "10.9.0.6" # destination IP - host B 
 
+packet = ip / ICMP()
 
+send(packet)
+```
 
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_12.png">
+        <figcaption style="font-size: smaller">Figure 12:  </figcaption>
+    </figure>
+</div> 
 
+And in wireshark we can observe the icmp packets.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_13.png">
+        <figcaption style="font-size: smaller">Figure 13: icmp packets captured by wireshark </figcaption>
+    </figure>
+</div>  
+
+### Task 1.3
+
+In this task, we will use Scapy to implement a custom traceroute tool that estimates the number of routers 
+between our VM and a chosen external IP address, we chose to 8.8.8.8, that is google.com.
+
+To do this we used the following python script:
+
+```python
+#!/usr/bin/env python3
+from scapy.all import *
+
+a = IP(dst='8.8.8.8', ttl=1)
+
+while 1:
+    packet = a / ICMP()
+    reply = sr1(packet, timeout=1)
+    if reply == None or (reply.type == 11 and reply.code == 0):
+        a.ttl += 1
+        continue
+
+    break
+
+print("Distance: ", a.ttl)
+```
+
+And the result is:
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_14.png">
+        <figcaption style="font-size: smaller">Figure 14: Result of the script  </figcaption>
+    </figure>
+</div>  
+
+### Task 1.4
+
+In this task we want to combine sniffing and spoofing.
+Our script should sniff ICMP echo requests on the LAN and immediately respond to any ICMP echo request with an ICMP echo reply, regardless of the target IP.
+
+```python
+#!/usr/bin/env python3
+from scapy.all import *
+
+def send_reply(pkt):
+    if pkt[ICMP].type != 8:  # Corrected 'pk' to 'pkt'
+        return
+    ip = IP(src=pkt[IP].dst, dst=pkt[IP].src)
+    icmp = ICMP(type=0, id=pkt[ICMP].id, seq=pkt[ICMP].seq)
+    reply = ip / icmp / pkt[Raw].load
+    send(reply, verbose=0)
+
+pkt = sniff(iface='br-449382b66784', filter='icmp', prn=send_reply)
+```
+
+We started by doing the `ping` command to 3 different IP's (not using the script):
+- 1.2.3.4 - No packets received
+- 10.9.0.99 - No packets received
+- 8.8.8.8 - Packets received
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_15.png">
+        <figcaption style="font-size: smaller">Figure 15: Result of the 3 ping's </figcaption>
+    </figure>
+</div>  
+
+Then we tried to ping each IP but with the script we created running:
+- 1.2.3.4 - Packets received
+
+Our program sends the ICMP echo reply even though the host does not exist, so this ping will say 1.2.3.4 is alive even though it isn´t.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_16.png">
+        <figcaption style="font-size: smaller">Figure 16: Ping 1.2.3.4 with the script running </figcaption>
+    </figure>
+    <figure>
+        <img src="images/logbook13/log13_17.png">
+        <figcaption style="font-size: smaller">Figure 17: Wireshark of ping 1.2.3.4 with the script running </figcaption>
+    </figure>
+</div>
+
+- 10.9.0.99 - No packets received
+
+On this second one, because 10.9.0.99 is in the same local area network as host A (`10.9.0.5`) so the packets don´t go through the attackers machine and therefore our program does nothing.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_18.png">
+        <figcaption style="font-size: smaller">Figure 18: Ping 10.9.0.99 with the script running </figcaption>
+    </figure>
+    <figure>
+        <img src="images/logbook13/log13_19.png">
+        <figcaption style="font-size: smaller">Figure 19: Wireshark of ping 10.9.0.99 with the script running </figcaption>
+    </figure>
+</div>
+
+- 8.8.8.8 - Duplicate packets received
+
+On the last one, before running with the script we where already receiving packets, now we will receive double, one, the one we were already receiving, from the actual existing site (google.com) and the other then the packets go through the attacker machine and therefore our program send the second packet.
+
+<div align="center">
+    <figure>
+        <img src="images/logbook13/log13_20.png">
+        <figcaption style="font-size: smaller">Figure 20: Ping 8.8.8.8 with the script running </figcaption>
+    </figure>
+    <figure>
+        <img src="images/logbook13/log13_21.png">
+        <figcaption style="font-size: smaller">Figure 21: Wireshark of ping 8.8.8.8 with the script running </figcaption>
+    </figure>
+</div>
